@@ -45,9 +45,6 @@ install -d %{buildroot}/etc/selinux/targeted/contexts/users/
 %post
 semodule -n -i %{_datadir}/selinux/packages/tailscaled.pp
 
-if [ $1 -eq 1 ]; then
-
-fi
 if /usr/sbin/selinuxenabled ; then
     /usr/sbin/load_policy
     %relabel_files
