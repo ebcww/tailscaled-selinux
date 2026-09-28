@@ -83,40 +83,6 @@ require {
 
 #============= tailscaled_t ==============
 
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t NetworkManager_dispatcher_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t NetworkManager_dispatcher_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t NetworkManager_dispatcher_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t irqbalance_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t irqbalance_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t irqbalance_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t kernel_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t mcelog_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t pcscd_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t pcscd_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t pcscd_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
 allow tailscaled_t policykit_t:dir { open read search };
 
 #!!!! This avc is allowed in the current policy
@@ -125,16 +91,7 @@ allow tailscaled_t policykit_t:file read;
 #!!!! This avc is allowed in the current policy
 allow tailscaled_t policykit_t:lnk_file read;
 
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t rpm_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t rpm_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t rpm_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
+#!!!! This avc is mandatory
 allow tailscaled_t self:cap_userns sys_ptrace;
 
 #!!!! This avc is allowed in the current policy
