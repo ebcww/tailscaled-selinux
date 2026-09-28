@@ -83,14 +83,6 @@ require {
 
 #============= tailscaled_t ==============
 
-allow tailscaled_t policykit_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t policykit_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t policykit_t:lnk_file read;
-
 #!!!! This avc is mandatory
 allow tailscaled_t self:cap_userns sys_ptrace;
 
@@ -115,86 +107,7 @@ allow tailscaled_t self:tun_socket create;
 #!!!! This avc is allowed in the current policy
 allow tailscaled_t self:unix_dgram_socket { connect create getattr };
 
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t setroubleshootd_t:dir { open read search };
 
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t setroubleshootd_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t setroubleshootd_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t staff_dbusd_t:dir { read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t staff_ssh_agent_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t staff_ssh_agent_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t staff_ssh_agent_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t staff_sudo_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t staff_sudo_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t staff_sudo_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t staff_t:file { getattr open };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t switcheroo_control_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t switcheroo_control_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t switcheroo_control_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t sysadm_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t sysadm_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t sysadm_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t system_cronjob_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t system_cronjob_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t system_cronjob_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t system_dbusd_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t system_dbusd_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t systemd_homed_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t systemd_homed_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t systemd_oomd_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t systemd_oomd_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t systemd_oomd_t:lnk_file read;
 
 #!!!! This avc is allowed in the current policy
 allow tailscaled_t systemd_resolved_t:file read;
@@ -203,107 +116,13 @@ allow tailscaled_t systemd_resolved_t:file read;
 allow tailscaled_t systemd_resolved_t:lnk_file read;
 
 #!!!! This avc is allowed in the current policy
-allow tailscaled_t systemd_userdbd_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t systemd_userdbd_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t systemd_userdbd_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t unconfined_dbusd_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t unconfined_dbusd_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t unconfined_dbusd_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t unconfined_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
 allow tailscaled_t var_run_t:sock_file { create setattr unlink };
 
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtlogd_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtlogd_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtlogd_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtnetworkd_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtnetworkd_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtnetworkd_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtnodedevd_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtnodedevd_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtnodedevd_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtstoraged_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtstoraged_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t virtstoraged_t:lnk_file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t xserver_t:dir { open read search };
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t xserver_t:file read;
-
-#!!!! This avc is allowed in the current policy
-allow tailscaled_t xserver_t:lnk_file read;
-avahi_systemctl(tailscaled_t)
-bluetooth_systemctl(tailscaled_t)
-chronyd_systemctl(tailscaled_t)
-colord_systemctl(tailscaled_t)
-container_read_state(tailscaled_t)
 corenet_rw_tun_tap_dev(tailscaled_t)
 corenet_tcp_connect_http_port(tailscaled_t)
-dev_rw_tpm(tailscaled_t)
-dnsmasq_read_state(tailscaled_t)
-files_list_kernel_modules(tailscaled_t)
 files_manage_var_lib_files(tailscaled_t)
-files_rw_pid_dirs(tailscaled_t)
-firewalld_read_state(tailscaled_t)
-fs_read_binfmt_misc(tailscaled_t)
-getty_systemctl(tailscaled_t)
-init_read_state(tailscaled_t)
-init_telinit(tailscaled_t)
-iptables_exec(tailscaled_t)
 kernel_dgram_send(tailscaled_t)
-kernel_list_proc(tailscaled_t)
-kernel_read_fs_sysctls(tailscaled_t)
 kernel_read_network_state(tailscaled_t)
 kernel_read_network_state_symlinks(tailscaled_t)
-kernel_read_proc_files(tailscaled_t)
 kernel_rw_net_sysctls(tailscaled_t)
 kernel_search_network_sysctl(tailscaled_t)
-logging_systemctl_audit(tailscaled_t)
-logging_systemctl_syslogd(tailscaled_t)
-modutils_exec_kmod(tailscaled_t)
-modutils_list_module_config(tailscaled_t)
-mount_read_state(tailscaled_t)
-rpm_exec(tailscaled_t)
-udev_read_state(tailscaled_t)
-unconfined_list_dirs(tailscaled_t)
-unconfined_read_files(tailscaled_t)
-unconfined_server_read_state(tailscaled_t)
-virt_virtqemud_read_state(tailscaled_t)
