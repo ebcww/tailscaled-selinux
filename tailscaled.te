@@ -9,7 +9,7 @@ type tailscaled_t;
 type tailscaled_exec_t;
 init_daemon_domain(tailscaled_t, tailscaled_exec_t)
 
-#permissive tailscaled_t;
+permissive tailscaled_t;
 
 type tailscaled_var_lib_t;
 files_type(tailscaled_var_lib_t)
@@ -38,35 +38,35 @@ miscfiles_read_localization(tailscaled_t)
 sysnet_dns_name_resolve(tailscaled_t)
 
 require {
-	type irqbalance_t;
-	type virtnetworkd_t;
-	type staff_sudo_t;
-	type tailscaled_t;
-	type staff_dbusd_t;
-	type system_cronjob_t;
-	type rpm_t;
-	type kernel_t;
-	type systemd_userdbd_t;
-	type system_dbusd_t;
-	type setroubleshootd_t;
-	type unconfined_dbusd_t;
-	type virtnodedevd_t;
-	type systemd_resolved_t;
-	type mcelog_t;
-	type NetworkManager_dispatcher_t;
-	type switcheroo_control_t;
-	type sysadm_t;
-	type pcscd_t;
-	type systemd_homed_t;
 	type systemd_oomd_t;
 	type staff_t;
+	type rpm_t;
 	type virtlogd_t;
-	type xserver_t;
-	type virtstoraged_t;
+	type virtnetworkd_t;
+	type system_cronjob_t;
+	type staff_sudo_t;
+	type systemd_userdbd_t;
+	type irqbalance_t;
+	type NetworkManager_dispatcher_t;
+	type systemd_homed_t;
+	type system_dbusd_t;
 	type var_run_t;
 	type policykit_t;
-	type unconfined_t;
+	type switcheroo_control_t;
 	type staff_ssh_agent_t;
+	type setroubleshootd_t;
+	type virtstoraged_t;
+	type virtnodedevd_t;
+	type kernel_t;
+	type systemd_resolved_t;
+	type mcelog_t;
+	type sysadm_t;
+	type staff_dbusd_t;
+	type xserver_t;
+	type tailscaled_t;
+	type unconfined_t;
+	type unconfined_dbusd_t;
+	type pcscd_t;
 	class netlink_netfilter_socket { bind create getattr getopt setopt };
 	class capability net_raw;
 	class unix_dgram_socket { connect create getattr };
@@ -82,16 +82,38 @@ require {
 }
 
 #============= tailscaled_t ==============
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t NetworkManager_dispatcher_t:dir { open read search };
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t NetworkManager_dispatcher_t:file read;
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t NetworkManager_dispatcher_t:lnk_file read;
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t irqbalance_t:dir { open read search };
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t irqbalance_t:file read;
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t irqbalance_t:lnk_file read;
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t kernel_t:dir { open read search };
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t mcelog_t:file read;
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t pcscd_t:dir { open read search };
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t pcscd_t:file read;
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t pcscd_t:lnk_file read;
 
 #!!!! This avc is allowed in the current policy
@@ -102,9 +124,17 @@ allow tailscaled_t policykit_t:file read;
 
 #!!!! This avc is allowed in the current policy
 allow tailscaled_t policykit_t:lnk_file read;
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t rpm_t:dir { open read search };
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t rpm_t:file read;
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t rpm_t:lnk_file read;
+
+#!!!! This avc is allowed in the current policy
 allow tailscaled_t self:cap_userns sys_ptrace;
 
 #!!!! This avc is allowed in the current policy
@@ -114,8 +144,7 @@ allow tailscaled_t self:capability net_raw;
 allow tailscaled_t self:netlink_generic_socket { bind create getattr getopt setopt };
 
 #!!!! This avc is allowed in the current policy
-allow tailscaled_t self:netlink_netfilter_socket { bind create getattr getopt };
-allow tailscaled_t self:netlink_netfilter_socket setopt;
+allow tailscaled_t self:netlink_netfilter_socket { bind create getattr getopt setopt };
 
 #!!!! This avc is allowed in the current policy
 allow tailscaled_t self:netlink_route_socket nlmsg_write;
