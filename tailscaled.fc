@@ -1,0 +1,3 @@
+/usr/bin/tailscaled		--	gen_context(system_u:object_r:tailscaled_exec_t,s0)
+
+/var/lib/tailscale/(/.*)?		gen_context(system_u:object_r:tailscaled_var_lib_t,s0)

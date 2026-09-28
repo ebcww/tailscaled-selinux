@@ -1,0 +1,210 @@
+
+## <summary>policy for tailscaled</summary>
+
+########################################
+## <summary>
+##	Execute tailscaled_exec_t in the tailscaled domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`tailscaled_domtrans',`
+	gen_require(`
+		type tailscaled_t, tailscaled_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, tailscaled_exec_t, tailscaled_t)
+')
+
+######################################
+## <summary>
+##	Execute tailscaled in the caller domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscaled_exec',`
+	gen_require(`
+		type tailscaled_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	can_exec($1, tailscaled_exec_t)
+')
+
+########################################
+## <summary>
+##	Search tailscaled lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscaled_search_lib',`
+	gen_require(`
+		type tailscaled_var_lib_t;
+	')
+
+	allow $1 tailscaled_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read tailscaled lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscaled_read_lib_files',`
+	gen_require(`
+		type tailscaled_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, tailscaled_var_lib_t, tailscaled_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage tailscaled lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscaled_manage_lib_files',`
+	gen_require(`
+		type tailscaled_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, tailscaled_var_lib_t, tailscaled_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage tailscaled lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscaled_manage_lib_dirs',`
+	gen_require(`
+		type tailscaled_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, tailscaled_var_lib_t, tailscaled_var_lib_t)
+')
+
+
+########################################
+## <summary>
+##	Execute tailscaled in the tailscaled domain, and
+##	allow the specified role the tailscaled domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	The role to be allowed the tailscaled domain.
+##	</summary>
+## </param>
+#
+interface(`tailscaled_run',`
+	gen_require(`
+		type tailscaled_t;
+		attribute_role tailscaled_roles;
+	')
+
+	tailscaled_domtrans($1)
+	roleattribute $2 tailscaled_roles;
+')
+
+########################################
+## <summary>
+##	Role access for tailscaled
+## </summary>
+## <param name="role">
+##	<summary>
+##	Role allowed access
+##	</summary>
+## </param>
+## <param name="domain">
+##	<summary>
+##	User domain for the role
+##	</summary>
+## </param>
+#
+interface(`tailscaled_role',`
+	gen_require(`
+		type tailscaled_t;
+		attribute_role tailscaled_roles;
+	')
+
+	roleattribute $1 tailscaled_roles;
+
+	tailscaled_domtrans($2)
+
+	ps_process_pattern($2, tailscaled_t)
+	allow $2 tailscaled_t:process { signull signal sigkill };
+')
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an tailscaled environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`tailscaled_admin',`
+	gen_require(`
+		type tailscaled_t;
+		type tailscaled_var_lib_t;
+	')
+
+	allow $1 tailscaled_t:process { signal_perms };
+	ps_process_pattern($1, tailscaled_t)
+
+    tunable_policy(`deny_ptrace',`',`
+        allow $1 tailscaled_t:process ptrace;
+    ')
+
+	files_search_var_lib($1)
+	admin_pattern($1, tailscaled_var_lib_t)
+	optional_policy(`
+		systemd_passwd_agent_exec($1)
+		systemd_read_fifo_file_passwd_run($1)
+	')
+')
