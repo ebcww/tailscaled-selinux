@@ -72,6 +72,6 @@ exit 0
 
 
 %changelog
-* Mon Sep 28 2026 YOUR NAME <YOUR@EMAILADDRESS> 1.0-1
+* Mon Sep 28 2026 Elijah <elijah@columbiarail.com> 1.0-1
 - Initial version
 
