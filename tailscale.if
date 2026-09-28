@@ -1,0 +1,233 @@
+
+## <summary>policy for tailscale</summary>
+
+########################################
+## <summary>
+##	Execute tailscale_exec_t in the tailscale domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`tailscale_domtrans',`
+	gen_require(`
+		type tailscale_t, tailscale_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, tailscale_exec_t, tailscale_t)
+')
+
+######################################
+## <summary>
+##	Execute tailscale in the caller domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscale_exec',`
+	gen_require(`
+		type tailscale_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	can_exec($1, tailscale_exec_t)
+')
+
+########################################
+## <summary>
+##	Search tailscale lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscale_search_lib',`
+	gen_require(`
+		type tailscale_var_lib_t;
+	')
+
+	allow $1 tailscale_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read tailscale lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscale_read_lib_files',`
+	gen_require(`
+		type tailscale_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, tailscale_var_lib_t, tailscale_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage tailscale lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscale_manage_lib_files',`
+	gen_require(`
+		type tailscale_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, tailscale_var_lib_t, tailscale_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage tailscale lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscale_manage_lib_dirs',`
+	gen_require(`
+		type tailscale_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, tailscale_var_lib_t, tailscale_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Read tailscale PID files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`tailscale_read_pid_files',`
+	gen_require(`
+		type tailscale_var_run_t;
+	')
+
+	files_search_pids($1)
+	read_files_pattern($1, tailscale_var_run_t, tailscale_var_run_t)
+')
+
+
+########################################
+## <summary>
+##	Execute tailscale in the tailscale domain, and
+##	allow the specified role the tailscale domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	The role to be allowed the tailscale domain.
+##	</summary>
+## </param>
+#
+interface(`tailscale_run',`
+	gen_require(`
+		type tailscale_t;
+		attribute_role tailscale_roles;
+	')
+
+	tailscale_domtrans($1)
+	roleattribute $2 tailscale_roles;
+')
+
+########################################
+## <summary>
+##	Role access for tailscale
+## </summary>
+## <param name="role">
+##	<summary>
+##	Role allowed access
+##	</summary>
+## </param>
+## <param name="domain">
+##	<summary>
+##	User domain for the role
+##	</summary>
+## </param>
+#
+interface(`tailscale_role',`
+	gen_require(`
+		type tailscale_t;
+		attribute_role tailscale_roles;
+	')
+
+	roleattribute $1 tailscale_roles;
+
+	tailscale_domtrans($2)
+
+	ps_process_pattern($2, tailscale_t)
+	allow $2 tailscale_t:process { signull signal sigkill };
+')
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an tailscale environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`tailscale_admin',`
+	gen_require(`
+		type tailscale_t;
+		type tailscale_var_lib_t;
+		type tailscale_var_run_t;
+	')
+
+	allow $1 tailscale_t:process { signal_perms };
+	ps_process_pattern($1, tailscale_t)
+
+    tunable_policy(`deny_ptrace',`',`
+        allow $1 tailscale_t:process ptrace;
+    ')
+
+	files_search_var_lib($1)
+	admin_pattern($1, tailscale_var_lib_t)
+
+	files_search_pids($1)
+	admin_pattern($1, tailscale_var_run_t)
+	optional_policy(`
+		systemd_passwd_agent_exec($1)
+		systemd_read_fifo_file_passwd_run($1)
+	')
+')

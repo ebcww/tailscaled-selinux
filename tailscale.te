@@ -1,0 +1,51 @@
+policy_module(tailscale, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+attribute_role tailscale_roles;
+roleattribute system_r tailscale_roles;
+
+type tailscale_t;
+type tailscale_exec_t;
+application_domain(tailscale_t, tailscale_exec_t)
+role tailscale_roles types tailscale_t;
+
+permissive tailscale_t;
+
+type tailscale_var_lib_t;
+files_type(tailscale_var_lib_t)
+
+type tailscale_var_run_t;
+files_pid_file(tailscale_var_run_t)
+
+########################################
+#
+# tailscale local policy
+#
+allow tailscale_t self:capability { setgid setuid };
+
+allow tailscale_t self:fifo_file manage_fifo_file_perms;
+allow tailscale_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(tailscale_t, tailscale_var_lib_t, tailscale_var_lib_t)
+manage_files_pattern(tailscale_t, tailscale_var_lib_t, tailscale_var_lib_t)
+manage_lnk_files_pattern(tailscale_t, tailscale_var_lib_t, tailscale_var_lib_t)
+files_var_lib_filetrans(tailscale_t, tailscale_var_lib_t, { dir file lnk_file })
+
+manage_dirs_pattern(tailscale_t, tailscale_var_run_t, tailscale_var_run_t)
+manage_files_pattern(tailscale_t, tailscale_var_run_t, tailscale_var_run_t)
+manage_lnk_files_pattern(tailscale_t, tailscale_var_run_t, tailscale_var_run_t)
+files_pid_filetrans(tailscale_t, tailscale_var_run_t, { dir file lnk_file })
+
+domain_use_interactive_fds(tailscale_t)
+
+files_read_etc_files(tailscale_t)
+
+auth_use_nsswitch(tailscale_t)
+
+miscfiles_read_localization(tailscale_t)
+
+sysnet_dns_name_resolve(tailscale_t)
