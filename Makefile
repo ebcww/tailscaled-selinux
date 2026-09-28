@@ -20,3 +20,8 @@ TYPE ?= $(NTYPE)
 
 HEADERDIR := $(SHAREDIR)/devel/include
 include $(HEADERDIR)/Makefile
+release:
+	echo $(PWD)
+	rpmbuild --define "_sourcedir $(PWD)" --define "_specdir $(PWD)" --define "_builddir $(PWD)" --define "_srcrpmdir $(PWD)" --define "_rpmdir $(PWD)" --define "_buildrootdir $(PWD)/.build"  -ba tailscaled_selinux.spec
+
+
