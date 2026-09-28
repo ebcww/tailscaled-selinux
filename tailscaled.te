@@ -5,13 +5,9 @@ policy_module(tailscaled, 1.0.0)
 # Declarations
 #
 
-attribute_role tailscaled_roles;
-roleattribute system_r tailscaled_roles;
-
 type tailscaled_t;
 type tailscaled_exec_t;
-application_domain(tailscaled_t, tailscaled_exec_t)
-role tailscaled_roles types tailscaled_t;
+init_daemon_domain(tailscaled_t, tailscaled_exec_t)
 
 #permissive tailscaled_t;
 
@@ -23,8 +19,7 @@ files_type(tailscaled_var_lib_t)
 # tailscaled local policy
 #
 allow tailscaled_t self:capability { setgid setuid };
-
-allow tailscaled_t self:fifo_file manage_fifo_file_perms;
+allow tailscaled_t self:fifo_file rw_fifo_file_perms;
 allow tailscaled_t self:unix_stream_socket create_stream_socket_perms;
 
 manage_dirs_pattern(tailscaled_t, tailscaled_var_lib_t, tailscaled_var_lib_t)
@@ -41,13 +36,3 @@ auth_use_nsswitch(tailscaled_t)
 miscfiles_read_localization(tailscaled_t)
 
 sysnet_dns_name_resolve(tailscaled_t)
-
-optional_policy(`
-	gen_require(`
-		type system_t;
-		role system_r;
-	')
-
-	tailscaled_run(system_t, system_r)
-')
-
