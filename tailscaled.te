@@ -13,7 +13,7 @@ type tailscaled_exec_t;
 application_domain(tailscaled_t, tailscaled_exec_t)
 role tailscaled_roles types tailscaled_t;
 
-permissive tailscaled_t;
+#permissive tailscaled_t;
 
 type tailscaled_var_lib_t;
 files_type(tailscaled_var_lib_t)
@@ -50,3 +50,24 @@ optional_policy(`
 
 	tailscaled_run(system_t, system_r)
 ')
+
+require {
+	type tailscaled_exec_t;
+	type init_t;
+	class file execute;
+}
+
+#============= init_t ==============
+allow init_t tailscaled_exec_t:file execute;
+
+require {
+	type tailscaled_exec_t;
+	type init_t;
+	class file { execute open read };
+}
+
+#============= init_t ==============
+
+#!!!! This avc is allowed in the current policy
+allow init_t tailscaled_exec_t:file execute;
+allow init_t tailscaled_exec_t:file { open read };
