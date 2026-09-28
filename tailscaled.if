@@ -118,61 +118,6 @@ interface(`tailscaled_manage_lib_dirs',`
 
 ########################################
 ## <summary>
-##	Execute tailscaled in the tailscaled domain, and
-##	allow the specified role the tailscaled domain.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed to transition
-##	</summary>
-## </param>
-## <param name="role">
-##	<summary>
-##	The role to be allowed the tailscaled domain.
-##	</summary>
-## </param>
-#
-interface(`tailscaled_run',`
-	gen_require(`
-		type tailscaled_t;
-		attribute_role tailscaled_roles;
-	')
-
-	tailscaled_domtrans($1)
-	roleattribute $2 tailscaled_roles;
-')
-
-########################################
-## <summary>
-##	Role access for tailscaled
-## </summary>
-## <param name="role">
-##	<summary>
-##	Role allowed access
-##	</summary>
-## </param>
-## <param name="domain">
-##	<summary>
-##	User domain for the role
-##	</summary>
-## </param>
-#
-interface(`tailscaled_role',`
-	gen_require(`
-		type tailscaled_t;
-		attribute_role tailscaled_roles;
-	')
-
-	roleattribute $1 tailscaled_roles;
-
-	tailscaled_domtrans($2)
-
-	ps_process_pattern($2, tailscaled_t)
-	allow $2 tailscaled_t:process { signull signal sigkill };
-')
-
-########################################
-## <summary>
 ##	All of the rules required to administrate
 ##	an tailscaled environment
 ## </summary>
