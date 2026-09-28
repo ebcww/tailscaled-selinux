@@ -13,7 +13,7 @@ type tailscale_exec_t;
 application_domain(tailscale_t, tailscale_exec_t)
 role tailscale_roles types tailscale_t;
 
-permissive tailscale_t;
+#permissive tailscale_t;
 
 type tailscale_var_lib_t;
 files_type(tailscale_var_lib_t)
