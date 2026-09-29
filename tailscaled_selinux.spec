@@ -8,7 +8,7 @@ restorecon -R /var/lib/tailscale/; \
 %define selinux_policyver 44.10-1
 
 Name:   tailscaled_selinux
-Version:	1.0
+Version:	1.1
 Release:	1%{?dist}
 Summary:	SELinux policy module for tailscaled
 
@@ -17,7 +17,7 @@ License:	GPLv2+
 # This is an example. You will need to change it.
 # For a complete guide on packaging your policy
 # see https://fedoraproject.org/wiki/SELinux/IndependentPolicy
-URL:		http://HOSTNAME
+URL:		https://github.com/ebcww/tailscaled-selinux
 Source0:	tailscaled.pp
 Source1:	tailscaled.if
 Source2:	tailscaled_selinux.8
@@ -71,4 +71,5 @@ exit 0
 %changelog
 * Mon Sep 28 2026 Elijah <elijah@columbiarail.com> 1.0-1
 - Initial version
-
+* Tuesday Sep 29 2026 Elijah <elijah@columbiarail.com> 1.1
+- Created Dontaudit Policy.
